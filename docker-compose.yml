@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  chaintracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chaintracker_engine
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+      - ./config.properties:/app/config.properties:ro
+    environment:
+      - SERVER_PORT=8080
+      - POLL_INTERVAL_SECONDS=15
+      - DATA_DIR=data

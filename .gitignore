@@ -1,0 +1,22 @@
+# ─── Secrets & local config ───
+config.properties
+
+# ─── Java build artifacts ───
+*.class
+out/
+build/
+target/
+
+# ─── Log & data files ───
+*.log
+data/
+sources.txt
+
+# ─── IDE / editor ───
+.idea/
+.vscode/
+*.iml
+*.swp
+*~
+.DS_Store
+Thumbs.db

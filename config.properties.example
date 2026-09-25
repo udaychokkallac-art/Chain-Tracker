@@ -1,0 +1,27 @@
+# ChainTracker Configuration
+# Copy this file to 'config.properties' and fill in your own values.
+# NEVER commit the real config.properties to version control.
+
+# ─── Web Server ───────────────────────────────────────
+server.port=8080
+
+# ─── Telegram Bot ─────────────────────────────────────
+# Create a bot via @BotFather on Telegram to get these.
+telegram.bot.token=YOUR_TELEGRAM_BOT_TOKEN
+telegram.chat.id=YOUR_TELEGRAM_CHAT_ID
+
+# ─── Monitoring ───────────────────────────────────────
+# How often (seconds) to poll the Bitcoin network.
+monitor.poll.interval.seconds=15
+
+# Price movement threshold (USD) to trigger an alert.
+monitor.price.alert.threshold=500.0
+
+# ─── Upstream APIs ────────────────────────────────────
+api.bitcoin.latestblock=https://blockchain.info/latestblock
+api.bitcoin.price=https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT
+api.bitcoin.websocket=wss://ws.blockchain.info/inv
+
+# ─── Storage & Ledger ────────────────────────────────
+storage.data.dir=data
+

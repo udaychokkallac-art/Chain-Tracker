@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChainTracker // Distributed Ledger Observability Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+    <div class="ambient-spotlight" aria-hidden="true"></div>
+
+    <header>
+        <div class="brand-area">
+            <a href="/" class="brand-logo" aria-label="ChainTracker Home">
+                <div class="brand-symbol"></div>
+                <span class="brand-title">ChainTracker</span>
+            </a>
+            <span class="brand-tag">ELECTRONICS &bull; OBSERVABILITY ENGINE</span>
+        </div>
+        <div class="header-status">
+            <span class="utc-clock" id="utcClock">--:--:-- UTC</span>
+            <div class="status-badge" id="statusBadge" aria-label="System Consensus Status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">CONNECTING</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 01: The Ledger Hero -->
+        <section aria-label="Hero Metric">
+            <div class="section-tag">01 // NETWORK CONSENSUS &bull; BLOCK TIP</div>
+            <div class="hero-section">
+                <div class="hero-headline">
+                    <span class="hero-title-small">the ledger</span>
+                    <div class="hero-number" id="valHeight"><span class="skeleton">#968,551</span></div>
+                    <div class="hero-sub" id="subHeight">SYNCHRONIZED WITH BITCOIN PEER NETWORK</div>
+                </div>
+                <div class="hero-metrics">
+                    <div class="metric-item">
+                        <div class="metric-label">BITCOIN SPOT RATE // USDT</div>
+                        <div class="metric-value-row">
+                            <span class="metric-val amber" id="valPrice"><span class="skeleton">$84,000.00</span></span>
+                            <span class="metric-meta">BINANCE SPOT FEED</span>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">NETWORK ROUND-TRIP LATENCY</div>
+                        <div class="metric-value-row">
+                            <span class="metric-val" id="valLatency"><span class="skeleton">480ms</span></span>
+                            <span class="metric-meta" id="latencyMeta">PEER RESPONSE TIME</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Telemetry Waveform (Opal Canvas Tribute) -->
+        <section aria-label="Telemetry Waveform">
+            <div class="section-tag">02 // PEER TELEMETRY PULSE &bull; REAL-TIME OSCILLATOR</div>
+            <div class="canvas-card">
+                <div class="canvas-header">
+                    <span class="canvas-title">HEARTBEAT FREQUENCY RESPONSE</span>
+                    <span class="canvas-hint">[ INTERACTIVE &bull; HOVER TO MODULATE ]</span>
+                </div>
+                <canvas id="telemetryCanvas" class="telemetry-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- 03: Consensus Block Hash & Engineering Readouts -->
+        <section aria-label="Block Hash and Telemetry">
+            <div class="section-tag">03 // PROOF OF WORK &bull; TIP SPECIFICATION</div>
+            <div class="precision-grid">
+                <div class="hardware-card">
+                    <div class="card-header-bar">
+                        <span class="card-caption">LATEST BLOCK SHA-256 HASH</span>
+                        <button id="copyHashBtn" onclick="copyHash()" class="copy-button" title="Copy block hash">
+                            <span id="copyText">COPY HASH</span>
+                        </button>
+                    </div>
+                    <div class="hash-engraving" id="valHash"><span class="skeleton">00000000000000000001f3d45b0be8ebe4d8a1f76102419b1630b717d3861d45</span></div>
+
+                    <div class="card-header-bar" style="margin-top: 18px;">
+                        <span class="card-caption">PREVIOUS BLOCK SHA-256 (PARENT PROOF)</span>
+                    </div>
+                    <div class="hash-engraving" id="valPrevHash" style="font-size: 11px; opacity: 0.85;"><span class="skeleton">0000000000000000000000000000000000000000000000000000000000000000</span></div>
+                </div>
+                <div class="hardware-card">
+                    <div class="card-header-bar">
+                        <span class="card-caption">ENGINE METRICS</span>
+                    </div>
+                    <div class="stat-list">
+                        <div class="stat-row">
+                            <span class="stat-key">SERVICE UPTIME</span>
+                            <span class="stat-val" id="valUptime"><span class="skeleton">0h 0m</span></span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-key">BLOCKS OBSERVED</span>
+                            <span class="stat-val" id="valBlocks"><span class="skeleton">0</span></span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-key">CONSENSUS REORGS</span>
+                            <span class="stat-val" id="valReorgs" style="color: var(--accent-amber);"><span class="skeleton">0</span></span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-key">TELEGRAM ALERTS</span>
+                            <span class="stat-val" id="valAlerts"><span class="skeleton">0</span></span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-key">INGESTION PIPELINE</span>
+                            <span class="stat-val" id="valWsMode" style="color: var(--accent-green);"><span class="skeleton">HYBRID</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04: Recent Blocks Stream -->
+        <section aria-label="Recent Blocks">
+            <div class="section-tag">04 // DISCOVERED BLOCKS STREAM</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>HEIGHT</th>
+                            <th>BLOCK HASH</th>
+                            <th>TRANSACTIONS</th>
+                            <th>PRICE AT TIP</th>
+                            <th>TIMESTAMP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blocksTableBody">
+                        <tr><td><span class="skeleton">#968551</span></td><td><span class="skeleton">0000...0000</span></td><td><span class="skeleton">4,047</span></td><td><span class="skeleton">$84,000.00</span></td><td><span class="skeleton">19:28:45</span></td></tr>
+                        <tr><td><span class="skeleton">#968550</span></td><td><span class="skeleton">0000...0000</span></td><td><span class="skeleton">3,892</span></td><td><span class="skeleton">$84,000.00</span></td><td><span class="skeleton">19:15:10</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 05: Event Log -->
+        <section aria-label="Flight Recorder">
+            <div class="section-tag">05 // FLIGHT RECORDER &bull; TELEMETRY LOGS</div>
+            <div class="event-ledger" id="eventList">
+                <div class="event-row"><span class="event-index">01</span><span class="event-time-tag"><span class="skeleton">19:28:45</span></span><span class="event-badge">STARTUP</span><span class="event-desc"><span class="skeleton">Loading telemetry stream...</span></span></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-top">
+            <div>
+                <div class="footer-col-title">CHAINTRACKER ELECTRONICS INC.</div>
+                <p>Original software engine for Bitcoin network observability and consensus verification.</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer Links">
+                <a href="/api/telemetry" target="_blank">/api/telemetry</a>
+                <a href="/api/events" target="_blank">/api/events</a>
+                <a href="https://blockchain.info" target="_blank" rel="noopener">Upstream Peer</a>
+                <a href="https://github.com" target="_blank" rel="noopener">Source Code</a>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>CORE JAVA 26 &bull; COM.SUN.NET.HTTPSERVER &bull; ZERO THIRD-PARTY RUNTIME DEPENDENCIES</span>
+            <span>DESIGN INSPIRED BY OPAL ELECTRONICS (OP.AL)</span>
+        </div>
+    </footer>
+    <script src="/js/app.js"></script>
+</body>
+</html>
